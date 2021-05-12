@@ -5,6 +5,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 var aux = true;
 
+
 function createGround() {
     const ground = {
         srcX: 0,
@@ -74,11 +75,10 @@ function createGreen() {
             })
 
         },
-        pares: [{ x: 0 }],
+        pares: [{ x: -10 }],
         atua() {
             green.pares[0].x--;
-
-            if (green.pares[0].x <= 0) {
+            if (green.pares[0].x < -20) {
                 green.pares = [];
                 green.pares.push({
                     x: canvas.width,
@@ -99,10 +99,17 @@ function createGreen() {
 function groundFind(flappy, ground) {
     const flappyY = flappy.y + flappy.altura
     const groundY = ground.y
+    if (flappy.x >= global.green.pares[0].x && flappy.x <= global.green.pares[0].x + global.green.largura) {
+        if (flappy.y - flappy.altura <= (global.green.pares[0].y + groundY) || flappy.y + flappy.altura >= (global.green.pares[0].y + 500)) {
+            changeScreen(screen.start)
+        }
+
+    }
 
     if (flappyY >= groundY) {
         return true;
     }
+
 
     return false
 
@@ -235,6 +242,7 @@ screen.game = {
         global.flappy.jump();
     },
     atua() {
+        global.ground.atua();
         global.flappy.atua();
         global.green.atua();
     }
